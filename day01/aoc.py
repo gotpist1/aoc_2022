@@ -3,33 +3,30 @@ from operator import add
 from os import environ
 
 
-def getCaloriesByElf(input_list):
-    int_list = list(map(lambda x: int(x.replace('\n', '')) if x != "\n" else 'x', input_list))
-    size = len(int_list)
-    idx_list = [idx + 1 for idx, val in enumerate(int_list) if val == "x"]
-    result = [int_list[i: j] for i, j in zip([0] + idx_list, idx_list + ([size] if idx_list[-1] != size else []))]
-    calories_by_elf = [reduce(add, [int(x) for x in val if x != 'x']) for val in result]
-    return calories_by_elf
+def getCaloriesByElf2(input_list):
+    return [reduce(add, elf_calories) for elf_calories in
+            list(map(lambda calorie_array: [int(calorie) for calorie in calorie_array if calorie != ''],
+                     [line.split("\n") for line in input_list.split("\n\n")]))]
+
 
 def getSolutionPart1(input_list):
     # Answer 65912
-    return max(getCaloriesByElf(input_list))
+    return max(getCaloriesByElf2(input_list))
 
 
 def getSolutionPart2(input_list):
     # right answer 195625
-    calories_by_elf = getCaloriesByElf(input_list)
+    calories_by_elf = getCaloriesByElf2(input_list)
     calories_by_elf.sort(reverse=True)
     return reduce(add, calories_by_elf[0:3])
 
 
-with open('input.txt') as f:
-    file_input = [x for x in f.readlines()]
+with open('input.txt', mode="r") as f:
+    all_text = f.read()
 
-print('Python')
 part = environ.get('part')
 
 if part == 'part2':
-    print(getSolutionPart2(file_input))
+    print(getSolutionPart2(all_text))
 else:
-    print(getSolutionPart1(file_input))
+    print(getSolutionPart1(all_text))
