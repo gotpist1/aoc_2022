@@ -17,6 +17,9 @@ ME_R_M="X"
 ME_P_M="Y"
 ME_S_M="Z"
 
+SHOULD_LOOSE = "X"
+S_DRAW = "Y"
+WIN = "Z"
 
 
 def getSolutionPart1(input_list):
@@ -50,8 +53,30 @@ def getSolutionPart1(input_list):
 
 def getSolutionPart2(input_list):
     #
-
-    return None
+    my_scores = []
+    s = [x.split(" ") for x in [y.replace("\n", '') for y in input_list]]
+    for moves in s:
+        op_move = moves[0]
+        outcome = moves[1]
+        if op_move == OP_R_M and outcome != WIN and outcome != S_DRAW:
+            my_scores.append(SCISSORS_P + LOST)
+        elif op_move == OP_R_M and outcome == WIN:
+            my_scores.append(PAPER_P + WON)
+        elif op_move == OP_R_M and outcome == S_DRAW:
+            my_scores.append(ROCK_P + DRAW)
+        elif op_move == OP_P_M and outcome != WIN and outcome != S_DRAW:
+            my_scores.append(ROCK_P + LOST)
+        elif op_move == OP_P_M and outcome == WIN:
+            my_scores.append(SCISSORS_P + WON)
+        elif op_move == OP_P_M and outcome == S_DRAW:
+            my_scores.append(PAPER_P + DRAW)
+        elif op_move == OP_S_M and outcome != WIN and outcome != S_DRAW:
+            my_scores.append(PAPER_P + LOST)
+        elif op_move == OP_S_M and outcome == WIN:
+            my_scores.append(ROCK_P + WON)
+        elif op_move == OP_S_M and outcome == S_DRAW:
+            my_scores.append(SCISSORS_P + DRAW)
+    return reduce(add, my_scores)
 
 
 with open('input.txt') as f:
